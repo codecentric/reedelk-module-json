@@ -21,8 +21,8 @@ import reactor.core.publisher.Flux;
 import java.util.List;
 
 
-@ModuleComponent("Result Set To JSON")
-@Description("Converts a Result Set into a JSON structure.")
+@ModuleComponent("ResultSet As JSON")
+@Description("Converts a ResultSet into a JSON structure.")
 @Component(service = ResultSetAsJson.class, scope = ServiceScope.PROTOTYPE)
 public class ResultSetAsJson implements ProcessorSync {
 
