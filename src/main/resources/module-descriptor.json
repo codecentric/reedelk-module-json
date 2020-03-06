@@ -1,0 +1,1 @@
+{"name":"module-json","components":[{"hidden":false,"type":"PROCESSOR","displayName":"Result Set As JSON","description":"Converts a Result Set into a JSON structure.","fullyQualifiedName":"com.reedelk.json.component.ResultSetAsJson","properties":[]}],"autocompleteItems":[],"autocompleteTypes":[]}
