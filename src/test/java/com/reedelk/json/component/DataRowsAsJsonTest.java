@@ -4,7 +4,7 @@ import com.reedelk.runtime.api.exception.ESBException;
 import com.reedelk.runtime.api.flow.FlowContext;
 import com.reedelk.runtime.api.message.Message;
 import com.reedelk.runtime.api.message.MessageBuilder;
-import com.reedelk.runtime.api.message.content.ResultRow;
+import com.reedelk.runtime.api.message.content.DataRow;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -19,21 +19,21 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
-class ResultSetAsJsonTest {
+class DataRowsAsJsonTest {
 
     @Mock
     private FlowContext mockFlowContext;
 
-    private ResultSetAsJson component = new ResultSetAsJson();
+    private DataRowsAsJson component = new DataRowsAsJson();
 
     @Test
     void shouldCorrectlyConvertToJson() {
         // Given
-        ResultRow row1 = TestResultRow.create(asList("id","name"), asList(4, "John Doe"));
-        ResultRow row2 = TestResultRow.create(asList("id","name"), asList(3, "Mark Luis"));
-        Flux<ResultRow> result = Flux.just(row1, row2);
+        DataRow row1 = TestDataRow.create(asList("id","name"), asList(4, "John Doe"));
+        DataRow row2 = TestDataRow.create(asList("id","name"), asList(3, "Mark Luis"));
+        Flux<DataRow> result = Flux.just(row1, row2);
         Message inMessage = MessageBuilder.get()
-                .withStream(result, ResultRow.class)
+                .withStream(result, DataRow.class)
                 .build();
 
         // When
@@ -65,21 +65,21 @@ class ResultSetAsJsonTest {
         IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class,
                 () -> component.apply(mockFlowContext, inMessage));
 
-        assertThat(thrown).hasMessage("ResultSetAsJson component " +
+        assertThat(thrown).hasMessage("DataRowsAsJson component " +
                 "expects message with payload of " +
-                "type=[ResultRow] but type=[String] was given.");
+                "type=[DataRow] but type=[String] was given.");
     }
 
-    static class TestResultRow implements ResultRow {
+    static class TestDataRow implements DataRow {
 
         private final List<String> columns;
         private final List<Object> values;
 
-        static ResultRow create(List<String> columns, List<Object> values) {
-            return new TestResultRow(columns, values);
+        static DataRow create(List<String> columns, List<Object> values) {
+            return new TestDataRow(columns, values);
         }
 
-        private TestResultRow(List<String> columns, List<Object> values) {
+        private TestDataRow(List<String> columns, List<Object> values) {
             this.columns = columns;
             this.values = values;
         }
