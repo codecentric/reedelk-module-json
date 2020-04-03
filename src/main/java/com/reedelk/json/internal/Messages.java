@@ -1,4 +1,4 @@
-package com.reedelk.json.commons;
+package com.reedelk.json.internal;
 
 public class Messages {
 

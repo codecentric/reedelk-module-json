@@ -1,6 +1,6 @@
 package com.reedelk.json.component;
 
-import com.reedelk.json.commons.Messages;
+import com.reedelk.json.internal.Messages;
 import com.reedelk.runtime.api.annotation.Description;
 import com.reedelk.runtime.api.annotation.ModuleComponent;
 import com.reedelk.runtime.api.component.ProcessorSync;
