@@ -19,12 +19,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
-class DataRowsAsJsonTest {
+class DataRowsToJSONTest {
 
     @Mock
     private FlowContext mockFlowContext;
 
-    private DataRowsAsJson component = new DataRowsAsJson();
+    private DataRowsToJSON component = new DataRowsToJSON();
 
     @Test
     void shouldCorrectlyConvertToJson() {

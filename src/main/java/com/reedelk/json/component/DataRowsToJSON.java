@@ -21,10 +21,10 @@ import reactor.core.publisher.Flux;
 import java.util.Collection;
 
 
-@ModuleComponent("Data Rows As JSON")
+@ModuleComponent("Data Rows To JSON")
 @Description("Converts a collection of Data Rows to a JSON structure.")
-@Component(service = DataRowsAsJson.class, scope = ServiceScope.PROTOTYPE)
-public class DataRowsAsJson implements ProcessorSync {
+@Component(service = DataRowsToJSON.class, scope = ServiceScope.PROTOTYPE)
+public class DataRowsToJSON implements ProcessorSync {
 
     private static final int INDENT_FACTOR = 4;
 
@@ -35,7 +35,7 @@ public class DataRowsAsJson implements ProcessorSync {
 
         if (!dataRows.getType().equals(DataRow.class)) {
             String errorMessage = Messages.ResultSetAsJson.WRONG_ARGUMENT
-                    .format(DataRowsAsJson.class.getSimpleName(),
+                    .format(DataRowsToJSON.class.getSimpleName(),
                             DataRow.class.getSimpleName(),
                             dataRows.getType().getSimpleName());
             throw new IllegalArgumentException(errorMessage);
