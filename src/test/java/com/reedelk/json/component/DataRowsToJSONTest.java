@@ -65,7 +65,7 @@ class DataRowsToJSONTest {
         IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class,
                 () -> component.apply(mockFlowContext, inMessage));
 
-        assertThat(thrown).hasMessage("DataRowsAsJson component " +
+        assertThat(thrown).hasMessage(DataRowsToJSON.class.getSimpleName() + " component " +
                 "expects message with payload of " +
                 "type=[DataRow] but type=[String] was given.");
     }
