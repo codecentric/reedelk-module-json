@@ -4,7 +4,7 @@ import com.reedelk.json.internal.Messages;
 import com.reedelk.runtime.api.annotation.Description;
 import com.reedelk.runtime.api.annotation.ModuleComponent;
 import com.reedelk.runtime.api.component.ProcessorSync;
-import com.reedelk.runtime.api.exception.ESBException;
+import com.reedelk.runtime.api.exception.PlatformException;
 import com.reedelk.runtime.api.flow.FlowContext;
 import com.reedelk.runtime.api.message.Message;
 import com.reedelk.runtime.api.message.MessageBuilder;
@@ -49,7 +49,7 @@ public class DataRowsToJSON implements ProcessorSync {
                     .withJson(result)
                     .build();
         } catch (Throwable exception) {
-            throw new ESBException(exception);
+            throw new PlatformException(exception);
         }
     }
 
