@@ -18,6 +18,7 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ServiceScope;
 import reactor.core.publisher.Flux;
 
+import java.io.Serializable;
 import java.util.Collection;
 
 
@@ -30,8 +31,8 @@ public class DataRowsToJSON implements ProcessorSync {
 
     @Override
     public Message apply(FlowContext flowContext, Message message) {
-        TypedContent<DataRow, Collection<DataRow>> content = message.content();
-        TypedPublisher<DataRow> dataRows = content.stream();
+        TypedContent<DataRow<Serializable>, Collection<DataRow<Serializable>>> content = message.content();
+        TypedPublisher<DataRow<Serializable>> dataRows = content.stream();
 
         if (!dataRows.getType().equals(DataRow.class)) {
             String errorMessage = Messages.ResultSetAsJson.WRONG_ARGUMENT
@@ -53,7 +54,7 @@ public class DataRowsToJSON implements ProcessorSync {
         }
     }
 
-    private static JSONArray convert(TypedPublisher<DataRow> resultSetFlux) throws JSONException {
+    private static JSONArray convert(TypedPublisher<DataRow<Serializable>> resultSetFlux) throws JSONException {
         JSONArray json = new JSONArray();
         Flux.from(resultSetFlux).subscribe(resultSetRow -> {
             JSONObject rowObject = new JSONObject();

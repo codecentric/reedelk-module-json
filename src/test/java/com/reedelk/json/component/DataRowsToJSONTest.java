@@ -11,6 +11,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import reactor.core.publisher.Flux;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 
@@ -29,8 +30,8 @@ class DataRowsToJSONTest {
     @Test
     void shouldCorrectlyConvertToJson() {
         // Given
-        DataRow row1 = TestDataRow.create(asList("id","name"), asList(4, "John Doe"));
-        DataRow row2 = TestDataRow.create(asList("id","name"), asList(3, "Mark Luis"));
+        DataRow<Serializable> row1 = TestDataRow.create(asList("id","name"), asList(4, "John Doe"));
+        DataRow<Serializable> row2 = TestDataRow.create(asList("id","name"), asList(3, "Mark Luis"));
         Flux<DataRow> result = Flux.just(row1, row2);
         Message inMessage = MessageBuilder.get()
                 .withStream(result, DataRow.class)
@@ -70,16 +71,16 @@ class DataRowsToJSONTest {
                 "type=[DataRow] but type=[String] was given.");
     }
 
-    static class TestDataRow implements DataRow {
+    static class TestDataRow implements DataRow<Serializable> {
 
         private final List<String> columns;
-        private final List<Object> values;
+        private final List<Serializable> values;
 
-        static DataRow create(List<String> columns, List<Object> values) {
+        static DataRow<Serializable> create(List<String> columns, List<Serializable> values) {
             return new TestDataRow(columns, values);
         }
 
-        private TestDataRow(List<String> columns, List<Object> values) {
+        private TestDataRow(List<String> columns, List<Serializable> values) {
             this.columns = columns;
             this.values = values;
         }
@@ -100,12 +101,12 @@ class DataRowsToJSONTest {
         }
 
         @Override
-        public Object get(int i) {
+        public Serializable get(int i) {
             return values.get(i - 1);
         }
 
         @Override
-        public Object getByColumnName(String columnName) {
+        public Serializable getByColumnName(String columnName) {
             for (int i = 1; i <= columns.size(); i++) {
                 if (columns.get(i).equals(columnName)) {
                     return i;
@@ -115,7 +116,7 @@ class DataRowsToJSONTest {
         }
 
         @Override
-        public List<Object> row() {
+        public List<Serializable> row() {
             return Collections.unmodifiableList(values);
         }
     }
