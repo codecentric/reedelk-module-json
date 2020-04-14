@@ -1,5 +1,6 @@
 package com.reedelk.json.component;
 
+import com.reedelk.runtime.api.commons.ImmutableMap;
 import com.reedelk.runtime.api.exception.PlatformException;
 import com.reedelk.runtime.api.flow.FlowContext;
 import com.reedelk.runtime.api.message.Message;
@@ -14,6 +15,7 @@ import reactor.core.publisher.Flux;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -83,6 +85,16 @@ class DataRowsToJSONTest {
         private TestDataRow(List<String> columns, List<Serializable> values) {
             this.columns = columns;
             this.values = values;
+        }
+
+        @Override
+        public Map<String, Serializable> attributes() {
+            return ImmutableMap.of();
+        }
+
+        @Override
+        public Serializable attribute(String name) {
+            return null;
         }
 
         @Override
