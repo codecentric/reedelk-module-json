@@ -1,16 +1,10 @@
 package com.reedelk.json.internal;
 
+import com.reedelk.runtime.api.commons.FormattedMessage;
+
 public class Messages {
 
     private Messages() {
-    }
-
-    private static String formatMessage(String template, Object ...args) {
-        return String.format(template, args);
-    }
-
-    interface FormattedMessage {
-        String format(Object ...args);
     }
 
     public enum ResultSetAsJson implements FormattedMessage {
@@ -18,15 +12,15 @@ public class Messages {
         WRONG_ARGUMENT("%s component expects message with payload of type=[%s] " +
                 "but type=[%s] was given.");
 
-        private String msg;
+        private String message;
 
-        ResultSetAsJson(String msg) {
-            this.msg = msg;
+        ResultSetAsJson(String message) {
+            this.message = message;
         }
 
         @Override
-        public String format(Object... args) {
-            return formatMessage(msg, args);
+        public String template() {
+            return message;
         }
     }
 }
