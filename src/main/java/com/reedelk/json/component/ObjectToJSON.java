@@ -32,14 +32,21 @@ public class ObjectToJSON implements ProcessorSync {
     @InitValue("true")
     @Example("true")
     @Description("If true the output JSON is pretty printed using the given indent factor.")
-    private Boolean prettyPrint;
+    private Boolean pretty;
 
     @Reference
     ConverterService converterService;
 
     @Override
     public Message apply(FlowContext flowContext, Message message) {
+
         Object payload = message.payload();
+        if (payload == null) {
+            // The payload was null, we return an empty message.
+            return MessageBuilder.get(JSONToObject.class)
+                    .empty()
+                    .build();
+        }
 
         Object result = convert(payload);
 
@@ -55,8 +62,8 @@ public class ObjectToJSON implements ProcessorSync {
                 .build();
     }
 
-    public void setPrettyPrint(Boolean prettyPrint) {
-        this.prettyPrint = prettyPrint;
+    public void setPretty(Boolean pretty) {
+        this.pretty = pretty;
     }
 
     private Object convert(Object payload) {
@@ -74,8 +81,9 @@ public class ObjectToJSON implements ProcessorSync {
             Map<?,?> payloadAsMap = (Map<?,?>) payload;
             JSONObject object = new JSONObject(payloadAsMap);
             payloadAsMap.forEach((BiConsumer<Object, Object>) (key, value) -> {
-                String keyAsString = converterService.convert(key, String.class); // keys must be string
-                object.put(keyAsString, convert(value));
+                String keyAsString = converterService.convert(key, String.class); // keys must be string.
+                Object convertedValue = convert(value); // we need to recursively convert the value (might be a nested object).
+                object.put(keyAsString, convertedValue);
             });
             return object;
 
@@ -94,8 +102,7 @@ public class ObjectToJSON implements ProcessorSync {
         } else if (payload != null) {
             // Java beans
             return PlatformTypes.isPrimitive(payload.getClass()) ?
-                    payload :
-                    new JSONObject(payload);
+                    payload : new JSONObject(payload);
 
         } else {
             return null;
