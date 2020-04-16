@@ -22,7 +22,7 @@ import java.util.function.BiConsumer;
 @Description("Converts a Java Object into a JSON string. " +
         "A Java List is mapped to a JSON Array and a Java Map is mapped to a Java Map. " +
         "Any other Java object is mapped using getters.")
-@Component(service = JSONToObject.class, scope = ServiceScope.PROTOTYPE)
+@Component(service = ObjectToJSON.class, scope = ServiceScope.PROTOTYPE)
 public class ObjectToJSON implements ProcessorSync {
 
     private static final int INDENT_FACTOR = 4;
@@ -43,7 +43,7 @@ public class ObjectToJSON implements ProcessorSync {
             json = ((JSONArray) result).toString(INDENT_FACTOR);
         }
 
-        return MessageBuilder.get()
+        return MessageBuilder.get(ObjectToJSON.class)
                 .withJson(json)
                 .build();
     }
