@@ -1,7 +1,7 @@
 package com.reedelk.json.component;
 
-import com.reedelk.runtime.api.annotation.Description;
-import com.reedelk.runtime.api.annotation.ModuleComponent;
+import com.reedelk.runtime.api.annotation.*;
+import com.reedelk.runtime.api.commons.PlatformTypes;
 import com.reedelk.runtime.api.component.ProcessorSync;
 import com.reedelk.runtime.api.converter.ConverterService;
 import com.reedelk.runtime.api.flow.FlowContext;
@@ -27,6 +27,13 @@ public class ObjectToJSON implements ProcessorSync {
 
     private static final int INDENT_FACTOR = 4;
 
+    @Property("Pretty print")
+    @DefaultValue("false")
+    @InitValue("true")
+    @Example("true")
+    @Description("If true the output JSON is pretty printed using the given indent factor.")
+    private Boolean prettyPrint;
+
     @Reference
     ConverterService converterService;
 
@@ -46,6 +53,10 @@ public class ObjectToJSON implements ProcessorSync {
         return MessageBuilder.get(ObjectToJSON.class)
                 .withJson(json)
                 .build();
+    }
+
+    public void setPrettyPrint(Boolean prettyPrint) {
+        this.prettyPrint = prettyPrint;
     }
 
     private Object convert(Object payload) {
@@ -82,7 +93,9 @@ public class ObjectToJSON implements ProcessorSync {
 
         } else if (payload != null) {
             // Java beans
-            return new JSONObject(payload);
+            return PlatformTypes.isPrimitive(payload.getClass()) ?
+                    payload :
+                    new JSONObject(payload);
 
         } else {
             return null;

@@ -4,7 +4,6 @@ import com.reedelk.json.internal.exception.JSONToObjectException;
 import com.reedelk.runtime.api.annotation.Description;
 import com.reedelk.runtime.api.annotation.ModuleComponent;
 import com.reedelk.runtime.api.component.ProcessorSync;
-import com.reedelk.runtime.api.exception.PlatformException;
 import com.reedelk.runtime.api.flow.FlowContext;
 import com.reedelk.runtime.api.message.Message;
 import com.reedelk.runtime.api.message.MessageBuilder;
@@ -18,11 +17,13 @@ import org.osgi.service.component.annotations.ServiceScope;
 import java.util.List;
 import java.util.Map;
 
-import static com.reedelk.json.internal.commons.Messages.JSONToObject.JSON_PARSE_ERROR;
+import static com.reedelk.json.internal.commons.Messages.JSONToObject.*;
 
 @ModuleComponent("JSON to Object")
 @Description("Converts a JSON string into a Java Object. " +
-        "A JSON object is mapped to a Java Map and a JSON array is mapped to a Java List.")
+        "A JSON object is mapped to a Java Map and a JSON array is mapped to a Java List. " +
+        "A null payload produces a null output payload and an exception is thrown if the input is not a String " +
+        "or a not valid JSON.")
 @Component(service = JSONToObject.class, scope = ServiceScope.PROTOTYPE)
 public class JSONToObject implements ProcessorSync {
 
@@ -39,37 +40,39 @@ public class JSONToObject implements ProcessorSync {
 
         checkStringOrThrow(payload);
 
-        Object json;
+        Object token;
         try {
-            json = new JSONTokener((String) payload).nextValue();
+            token = new JSONTokener((String) payload).nextValue();
         } catch (JSONException exception) {
             String error = JSON_PARSE_ERROR.format(exception.getMessage());
             throw new JSONToObjectException(error, exception);
         }
 
-        if (json instanceof JSONObject) {
-            JSONObject object = (JSONObject) json;
+        if (token instanceof JSONObject) {
+            JSONObject object = (JSONObject) token;
             Map<String, Object> stringObjectMap = object.toMap();
             return MessageBuilder.get(JSONToObject.class)
                     .withJavaObject(stringObjectMap)
                     .build();
 
-        } else if (json instanceof JSONArray) {
-            JSONArray array = (JSONArray) json;
+        } else if (token instanceof JSONArray) {
+            JSONArray array = (JSONArray) token;
             List<Object> objects = array.toList();
             return MessageBuilder.get(JSONToObject.class)
                     .withList(objects, Object.class)
                     .build();
 
         } else {
-            throw new JSONToObjectException("Not a valid JSON");
+            String error = JSON_TOKEN_ERROR.format(token);
+            throw new JSONToObjectException(error);
         }
     }
 
     private void checkStringOrThrow(Object payload) {
         if (!(payload instanceof String)) {
             // The input is not a string.
-            throw new PlatformException("Expected string");
+            String message = JSON_INPUT_ERROR.format(payload.getClass().getSimpleName());
+            throw new JSONToObjectException(message);
         }
     }
 }
