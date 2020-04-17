@@ -2,6 +2,8 @@ package com.reedelk.json.component;
 
 import com.reedelk.json.internal.ObjectToJSONConverter;
 import com.reedelk.json.internal.commons.Defaults;
+import com.reedelk.json.internal.commons.IsValid;
+import com.reedelk.json.internal.exception.ObjectToJSONException;
 import com.reedelk.runtime.api.annotation.*;
 import com.reedelk.runtime.api.component.ProcessorSync;
 import com.reedelk.runtime.api.converter.ConverterService;
@@ -15,6 +17,9 @@ import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ServiceScope;
 
 import java.util.Optional;
+
+import static com.reedelk.json.internal.commons.Messages.ObjectToJSON.NOT_JSON_STRING;
+import static com.reedelk.json.internal.commons.Messages.ObjectToJSON.NOT_VALID_JSON_OBJECT;
 
 @ModuleComponent("Object to JSON")
 @Description("Converts a Java Object into a JSON string. " +
@@ -64,28 +69,25 @@ public class ObjectToJSON implements ProcessorSync {
             return MessageBuilder.get(JSONToObject.class)
                     .empty()
                     .build();
+
+        } else if (payload instanceof String) {
+            // We check that it is a valid JSON.
+            String input = (String) payload;
+            if (IsValid.json(input)) {
+                return MessageBuilder.get(JSONToObject.class)
+                        .withJson(input)
+                        .build();
+            } else {
+                throw new ObjectToJSONException(NOT_JSON_STRING.format());
+            }
+
+        } else {
+            Object result = converter.toJSON(payload);
+            String json = print(result);
+            return MessageBuilder.get(ObjectToJSON.class)
+                    .withJson(json)
+                    .build();
         }
-
-        Object result = converter.toJSON(payload);
-
-        String json = null;
-
-        if (result instanceof JSONObject) {
-            JSONObject outObject = (JSONObject) result;
-            json = isPrettyPrint ?
-                    outObject.toString(theIndentFactor) :
-                    outObject.toString();
-
-        } else if (result instanceof JSONArray) {
-            JSONArray outArray = (JSONArray) result;
-            json = isPrettyPrint ?
-                    outArray.toString(theIndentFactor) :
-                    outArray.toString();
-        }
-
-        return MessageBuilder.get(ObjectToJSON.class)
-                .withJson(json)
-                .build();
     }
 
     public void setPrettyPrint(Boolean prettyPrint) {
@@ -94,5 +96,23 @@ public class ObjectToJSON implements ProcessorSync {
 
     public void setIndentFactor(Integer indentFactor) {
         this.indentFactor = indentFactor;
+    }
+
+    private String print(Object result) {
+        if (result instanceof JSONObject) {
+            JSONObject outObject = (JSONObject) result;
+            return isPrettyPrint ?
+                    outObject.toString(theIndentFactor) :
+                    outObject.toString();
+        } else if (result instanceof JSONArray) {
+            JSONArray outArray = (JSONArray) result;
+            return isPrettyPrint ?
+                    outArray.toString(theIndentFactor) :
+                    outArray.toString();
+
+        } else {
+            // A JSON is valid if and only if the Root is an array or an object.
+            throw new ObjectToJSONException(NOT_VALID_JSON_OBJECT.format(result == null ? null : result.getClass()));
+        }
     }
 }

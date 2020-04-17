@@ -28,7 +28,8 @@ public class Messages {
 
     public enum ObjectToJSON implements FormattedMessage {
 
-        JSON_PARSE_ERROR("The JSON is not");
+        NOT_VALID_JSON_OBJECT("Type=[%s] cannot be printed as valid JSON object."),
+        NOT_JSON_STRING("The payload string is not a valid JSON.");
 
         private final String message;
 

@@ -28,7 +28,6 @@ public class ObjectToJSONConverter {
         } else if (payload != null) {
             return PlatformTypes.isPrimitive(payload.getClass()) ? // To Primitive or JSON Object
                     payload : new JSONObject(payload);
-
         } else {
             return null;
         }
