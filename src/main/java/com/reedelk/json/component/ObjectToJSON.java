@@ -31,6 +31,7 @@ import static com.reedelk.json.internal.commons.Messages.ObjectToJSON.NOT_VALID_
 public class ObjectToJSON implements ProcessorSync {
 
     @Property("Indent")
+    @Hint("4")
     @Example("2")
     @DefaultValue("2")
     @Description("The number of spaces to add to each level of indentation. " +
@@ -41,7 +42,6 @@ public class ObjectToJSON implements ProcessorSync {
 
     @Property("Pretty print")
     @Example("true")
-    @InitValue("true")
     @DefaultValue("false")
     @Description("If true the output JSON is pretty printed using the given indent factor.")
     private Boolean prettyPrint;
