@@ -1,22 +1,20 @@
 package com.reedelk.json.component;
 
+import com.reedelk.json.internal.ObjectToJSONConverter;
+import com.reedelk.json.internal.commons.Defaults;
 import com.reedelk.runtime.api.annotation.*;
-import com.reedelk.runtime.api.commons.PlatformTypes;
 import com.reedelk.runtime.api.component.ProcessorSync;
 import com.reedelk.runtime.api.converter.ConverterService;
 import com.reedelk.runtime.api.flow.FlowContext;
 import com.reedelk.runtime.api.message.Message;
 import com.reedelk.runtime.api.message.MessageBuilder;
-import com.reedelk.runtime.api.message.content.DataRow;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ServiceScope;
 
-import java.util.List;
-import java.util.Map;
-import java.util.function.BiConsumer;
+import java.util.Optional;
 
 @ModuleComponent("Object to JSON")
 @Description("Converts a Java Object into a JSON string. " +
@@ -25,17 +23,35 @@ import java.util.function.BiConsumer;
 @Component(service = ObjectToJSON.class, scope = ServiceScope.PROTOTYPE)
 public class ObjectToJSON implements ProcessorSync {
 
-    private static final int INDENT_FACTOR = 4;
-
     @Property("Pretty print")
-    @DefaultValue("false")
-    @InitValue("true")
     @Example("true")
+    @InitValue("true")
+    @DefaultValue("false")
     @Description("If true the output JSON is pretty printed using the given indent factor.")
-    private Boolean pretty;
+    private Boolean prettyPrint;
+
+    @Property("Indent factor")
+    @Example("2")
+    @DefaultValue("2")
+    @Description("The number of spaces to add to each level of indentation. " +
+            "If indent factor is 0 JSON object has only one key, " +
+            " then the object will be output on a single line: <code>{ {\"key\": 1}}</code>")
+    private Integer indentFactor;
+
 
     @Reference
     ConverterService converterService;
+
+    private boolean isPrettyPrint;
+    private int theIndentFactor;
+    private ObjectToJSONConverter converter;
+
+    @Override
+    public void initialize() {
+        isPrettyPrint = Optional.ofNullable(prettyPrint).orElse(Defaults.PRETTY);
+        theIndentFactor = Optional.ofNullable(indentFactor).orElse(Defaults.INDENT_FACTOR);
+        converter = new ObjectToJSONConverter(converterService);
+    }
 
     @Override
     public Message apply(FlowContext flowContext, Message message) {
@@ -48,13 +64,21 @@ public class ObjectToJSON implements ProcessorSync {
                     .build();
         }
 
-        Object result = convert(payload);
+        Object result = converter.toJSON(payload);
 
         String json = null;
+
         if (result instanceof JSONObject) {
-            json = ((JSONObject) result).toString(INDENT_FACTOR);
+            JSONObject outObject = (JSONObject) result;
+            json = isPrettyPrint ?
+                    outObject.toString(theIndentFactor) :
+                    outObject.toString();
+
         } else if (result instanceof JSONArray) {
-            json = ((JSONArray) result).toString(INDENT_FACTOR);
+            JSONArray outArray = (JSONArray) result;
+            json = isPrettyPrint ?
+                    outArray.toString(theIndentFactor) :
+                    outArray.toString();
         }
 
         return MessageBuilder.get(ObjectToJSON.class)
@@ -62,50 +86,11 @@ public class ObjectToJSON implements ProcessorSync {
                 .build();
     }
 
-    public void setPretty(Boolean pretty) {
-        this.pretty = pretty;
+    public void setPrettyPrint(Boolean prettyPrint) {
+        this.prettyPrint = prettyPrint;
     }
 
-    private Object convert(Object payload) {
-        if (payload instanceof List) {
-            // JSON Array
-            List<?> payloadAsList = (List<?>) payload;
-            JSONArray array = new JSONArray(payloadAsList);
-            for (int i = 0; i < payloadAsList.size(); i++) {
-                array.put(i, convert(payloadAsList.get(i)));
-            }
-            return array;
-
-        } else if (payload instanceof Map) {
-            // JSON Object
-            Map<?,?> payloadAsMap = (Map<?,?>) payload;
-            JSONObject object = new JSONObject(payloadAsMap);
-            payloadAsMap.forEach((BiConsumer<Object, Object>) (key, value) -> {
-                String keyAsString = converterService.convert(key, String.class); // keys must be string.
-                Object convertedValue = convert(value); // we need to recursively convert the value (might be a nested object).
-                object.put(keyAsString, convertedValue);
-            });
-            return object;
-
-        } else if (payload instanceof DataRow) {
-            // DataRow mapping
-            DataRow<?> payloadAsDataRow = (DataRow<?>) payload;
-
-            JSONObject rowObject = new JSONObject();
-            int numColumns = payloadAsDataRow.columnCount();
-            for (int i = 1; i < numColumns + 1; i++) {
-                String columnName = payloadAsDataRow.columnName(i);
-                rowObject.put(columnName, payloadAsDataRow.get(i));
-            }
-            return rowObject;
-
-        } else if (payload != null) {
-            // Java beans
-            return PlatformTypes.isPrimitive(payload.getClass()) ?
-                    payload : new JSONObject(payload);
-
-        } else {
-            return null;
-        }
+    public void setIndentFactor(Integer indentFactor) {
+        this.indentFactor = indentFactor;
     }
 }

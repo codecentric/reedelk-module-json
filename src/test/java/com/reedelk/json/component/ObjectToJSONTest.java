@@ -5,6 +5,7 @@ import com.reedelk.runtime.api.flow.FlowContext;
 import com.reedelk.runtime.api.message.Message;
 import com.reedelk.runtime.api.message.MessageBuilder;
 import com.reedelk.runtime.api.message.content.DataRow;
+import com.reedelk.runtime.api.message.content.Pair;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -45,6 +46,8 @@ class ObjectToJSONTest {
     @Test
     void shouldConvertDataRowStream() {
         // Given
+        component.initialize();
+
         DataRow<Serializable> row1 = TestDataRow.create(asList("id","name"), asList(4, "John Doe"));
         DataRow<Serializable> row2 = TestDataRow.create(asList("id","name"), asList(3, "Mark Luis"));
 
@@ -73,6 +76,8 @@ class ObjectToJSONTest {
     @Test
     void shouldConvertDataRow() {
         // Given
+        component.initialize();
+
         DataRow<Serializable> row = TestDataRow.create(asList("id","name"), asList(4, "John Doe"));
 
         Message inMessage = MessageBuilder.get(TestComponent.class)
@@ -94,6 +99,8 @@ class ObjectToJSONTest {
     @Test
     void shouldConvertJavaMap() {
         // Given
+        component.initialize();
+
         Map<String,Object> myObject = of("key1", "value1", "key2", "value2");
 
         Message inMessage = MessageBuilder.get(TestComponent.class)
@@ -115,6 +122,8 @@ class ObjectToJSONTest {
     @Test
     void shouldConvertNestedJavaMap() {
         // Given
+        component.initialize();
+
         Map<String,Object> myObject =
                 of("key1", "value1", "key2", of("key3", "value3"));
 
@@ -137,6 +146,8 @@ class ObjectToJSONTest {
     @Test
     void shouldConvertList() {
         // Given
+        component.initialize();
+
         List<String> myObject = asList("one", "two", "three");
 
         Message inMessage = MessageBuilder.get(TestComponent.class)
@@ -159,6 +170,8 @@ class ObjectToJSONTest {
     @Test
     void shouldConvertNestedList() {
         // Given
+        component.initialize();
+
         List<Object> myObject = asList("one", "two", asList("three", "four", "five"));
 
         Message inMessage = MessageBuilder.get(TestComponent.class)
@@ -185,6 +198,8 @@ class ObjectToJSONTest {
     @Test
     void shouldConvertNestedListWithMap() {
         // Given
+        component.initialize();
+
         List<Object> myObject = asList("one", "two", of("three", "four", "five", of("six", 6)));
 
         Message inMessage = MessageBuilder.get(TestComponent.class)
@@ -208,8 +223,30 @@ class ObjectToJSONTest {
     }
 
     @Test
+    void shouldConvertPair() {
+        // Given
+        component.initialize();
+
+        Pair<String, Integer> pair = Pair.create("one", 2);
+
+        Message inMessage = MessageBuilder.get(TestComponent.class)
+                .withJavaObject(pair)
+                .build();
+
+        // When
+        Message actual = component.apply(context, inMessage);
+
+        // Then
+        String actualJson = actual.payload();
+        String expectedJson = "{\"left\":\"one\",\"right\":2}";
+        assertEquals(expectedJson, actualJson, STRICT);
+    }
+
+    @Test
     void shouldReturnNullWhenInputIsNull() {
         // Given
+        component.initialize();
+
         Message inMessage = MessageBuilder.get(TestComponent.class)
                 .empty()
                 .build();
@@ -222,5 +259,54 @@ class ObjectToJSONTest {
         assertThat(payload).isNull();
     }
 
-    // TODO: Finish me. pretty print etc etc ..
+    @Test
+    void shouldPrettyPrint() {
+        // Given
+        component.setPrettyPrint(true);
+        component.initialize();
+
+        List<Object> myObject = asList("one", "two", of("three", "four"));
+
+        Message inMessage = MessageBuilder.get(TestComponent.class)
+                .withJavaObject(myObject)
+                .build();
+
+        // When
+        Message actual = component.apply(context, inMessage);
+
+        // Then
+        String actualJson = actual.payload();
+        String expectedJson = "[\n" +
+                "  \"one\",\n" +
+                "  \"two\",\n" +
+                "  {\"three\": \"four\"}\n" +
+                "]";
+        assertEquals(expectedJson, actualJson, STRICT);
+    }
+
+    @Test
+    void shouldPrettyPrintWithGivenIndentFactor() {
+        // Given
+        component.setPrettyPrint(true);
+        component.setIndentFactor(5);
+        component.initialize();
+
+        List<Object> myObject = asList("one", "two", of("three", "four"));
+
+        Message inMessage = MessageBuilder.get(TestComponent.class)
+                .withJavaObject(myObject)
+                .build();
+
+        // When
+        Message actual = component.apply(context, inMessage);
+
+        // Then
+        String actualJson = actual.payload();
+        String expectedJson = "[\n" +
+                "     \"one\",\n" +
+                "     \"two\",\n" +
+                "     {\"three\": \"four\"}\n" +
+                "]";
+        assertEquals(expectedJson, actualJson, STRICT);
+    }
 }
