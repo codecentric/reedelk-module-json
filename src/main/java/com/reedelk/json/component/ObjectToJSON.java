@@ -25,14 +25,7 @@ import java.util.Optional;
 @Component(service = ObjectToJSON.class, scope = ServiceScope.PROTOTYPE)
 public class ObjectToJSON implements ProcessorSync {
 
-    @Property("Pretty print")
-    @Example("true")
-    @InitValue("true")
-    @DefaultValue("false")
-    @Description("If true the output JSON is pretty printed using the given indent factor.")
-    private Boolean prettyPrint;
-
-    @Property("Indent factor")
+    @Property("Indent")
     @Example("2")
     @DefaultValue("2")
     @Description("The number of spaces to add to each level of indentation. " +
@@ -40,6 +33,13 @@ public class ObjectToJSON implements ProcessorSync {
             " then the object will be output on a single line: <code>{ {\"key\": 1}}</code>")
     @When(propertyName = "prettyPrint", propertyValue = "true")
     private Integer indentFactor;
+
+    @Property("Pretty print")
+    @Example("true")
+    @InitValue("true")
+    @DefaultValue("false")
+    @Description("If true the output JSON is pretty printed using the given indent factor.")
+    private Boolean prettyPrint;
 
     @Reference
     ConverterService converterService;
