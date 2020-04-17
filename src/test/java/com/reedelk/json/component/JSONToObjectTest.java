@@ -6,6 +6,7 @@ import com.reedelk.runtime.api.flow.FlowContext;
 import com.reedelk.runtime.api.message.Message;
 import com.reedelk.runtime.api.message.MessageBuilder;
 import com.reedelk.runtime.api.message.content.Pair;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -26,6 +27,11 @@ class JSONToObjectTest {
     private FlowContext context;
 
     private JSONToObject component = new JSONToObject();
+
+    @BeforeEach
+    void setUp() {
+        component.initialize();
+    }
 
     @Test
     void shouldConvertJSONArrayToList() {
