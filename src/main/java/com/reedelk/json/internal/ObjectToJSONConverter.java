@@ -54,7 +54,7 @@ public class ObjectToJSONConverter {
     private JSONObject toJSON(DataRow<?> dataRow) {
         JSONObject rowObject = new JSONObject();
         int numColumns = dataRow.columnCount();
-        for (int i = 1; i < numColumns + 1; i++) {
+        for (int i = 0; i < numColumns; i++) {
             String columnName = dataRow.columnName(i);
             rowObject.put(columnName, dataRow.get(i));
         }
