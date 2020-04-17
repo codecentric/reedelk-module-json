@@ -18,6 +18,7 @@
         <assertj.version>3.11.1</assertj.version>
         <maven.compiler.release>8</maven.compiler.release>
         <mockito.version>2.23.0</mockito.version>
+        <jacoco.version>0.8.2</jacoco.version>
         <json.version>20190722</json.version>
         <junit.version>5.5.2</junit.version>
         <jsonassert.version>1.5.0</jsonassert.version>
@@ -29,6 +30,7 @@
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>${json.version}</version>
+            <scope>provided</scope>
         </dependency>
 
         <!-- Test dependencies -->
@@ -69,4 +71,49 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <!-- Copy the artifact into the runtime/modules directory -->
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <configuration>
+                    <tasks>
+                        <copy file="target/${project.artifactId}-${project.version}.jar"
+                              tofile="../runtime/runtime-launcher/modules/${project.artifactId}-${project.version}.jar">
+                        </copy>
+                    </tasks>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- JaCoCo test coverage -->
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>generate-code-coverage-report</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
