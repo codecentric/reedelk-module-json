@@ -19,7 +19,9 @@ import java.util.Optional;
 @ModuleComponent("Object to JSON")
 @Description("Converts a Java Object into a JSON string. " +
         "A Java List is mapped to a JSON Array and a Java Map is mapped to a Java Map. " +
-        "Any other Java object is mapped using getters.")
+        "Any other Java object is mapped using getters. " +
+        "If pretty print is set to true, the output JSON is pretty printed using the given indent factor which " +
+        "adds a number of spaces to each level of indentation.")
 @Component(service = ObjectToJSON.class, scope = ServiceScope.PROTOTYPE)
 public class ObjectToJSON implements ProcessorSync {
 
@@ -36,14 +38,14 @@ public class ObjectToJSON implements ProcessorSync {
     @Description("The number of spaces to add to each level of indentation. " +
             "If indent factor is 0 JSON object has only one key, " +
             " then the object will be output on a single line: <code>{ {\"key\": 1}}</code>")
+    @When(propertyName = "prettyPrint", propertyValue = "true")
     private Integer indentFactor;
-
 
     @Reference
     ConverterService converterService;
 
-    private boolean isPrettyPrint;
     private int theIndentFactor;
+    private boolean isPrettyPrint;
     private ObjectToJSONConverter converter;
 
     @Override
