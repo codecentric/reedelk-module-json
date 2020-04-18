@@ -7,6 +7,7 @@ import com.reedelk.runtime.api.message.MessageBuilder;
 import com.reedelk.runtime.api.message.content.DataRow;
 import com.reedelk.runtime.api.message.content.DefaultDataRow;
 import com.reedelk.runtime.api.message.content.Pair;
+import com.reedelk.runtime.api.message.content.TypedPublisher;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -51,9 +52,10 @@ class ObjectToJSONTest {
 
         DataRow<Serializable> row1 = DefaultDataRow.create(asList("id","name"), asList(4, "John Doe"));
         DataRow<Serializable> row2 = DefaultDataRow.create(asList("id","name"), asList(3, "Mark Luis"));
+        TypedPublisher<DataRow> typedPublisher = TypedPublisher.from(Flux.just(row1, row2), DataRow.class);
 
         Message inMessage = MessageBuilder.get(TestComponent.class)
-                .withStream(Flux.just(row1, row2), DataRow.class)
+                .withTypedPublisher(typedPublisher)
                 .build();
 
         // When
