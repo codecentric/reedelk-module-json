@@ -39,6 +39,10 @@ public class JSONToObject implements ProcessorSync {
 
         Preconditions.checkIsStringOrThrow(payload);
 
-        return converter.toObject((String) payload);
+        Object asJavaObject = converter.toObject((String) payload);
+
+        return MessageBuilder.get(JSONToObject.class)
+                .withJavaObject(asJavaObject)
+                .build();
     }
 }
