@@ -30,6 +30,12 @@ import static com.reedelk.json.internal.commons.Messages.ObjectToJSON.NOT_VALID_
 @Component(service = ObjectToJSON.class, scope = ServiceScope.PROTOTYPE)
 public class ObjectToJSON implements ProcessorSync {
 
+    @Property("Pretty print")
+    @Example("true")
+    @DefaultValue("false")
+    @Description("If true the output JSON is pretty printed using the given indent factor.")
+    private Boolean prettyPrint;
+
     @Property("Indent")
     @Hint("4")
     @Example("2")
@@ -39,12 +45,6 @@ public class ObjectToJSON implements ProcessorSync {
             " then the object will be output on a single line: <code>{ {\"key\": 1}}</code>")
     @When(propertyName = "prettyPrint", propertyValue = "true")
     private Integer indentFactor;
-
-    @Property("Pretty print")
-    @Example("true")
-    @DefaultValue("false")
-    @Description("If true the output JSON is pretty printed using the given indent factor.")
-    private Boolean prettyPrint;
 
     @Reference
     ConverterService converterService;
