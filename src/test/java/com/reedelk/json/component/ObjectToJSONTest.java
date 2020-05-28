@@ -4,18 +4,13 @@ import com.reedelk.runtime.api.converter.ConverterService;
 import com.reedelk.runtime.api.flow.FlowContext;
 import com.reedelk.runtime.api.message.Message;
 import com.reedelk.runtime.api.message.MessageBuilder;
-import com.reedelk.runtime.api.message.content.DataRow;
-import com.reedelk.runtime.api.message.content.DefaultDataRow;
 import com.reedelk.runtime.api.message.content.Pair;
-import com.reedelk.runtime.api.message.content.TypedPublisher;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import reactor.core.publisher.Flux;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
@@ -43,60 +38,6 @@ class ObjectToJSONTest {
                 .convert(any(String.class), eq(String.class));
 
         component.converterService = converterService;
-    }
-
-    @Test
-    void shouldConvertDataRowStream() {
-        // Given
-        component.initialize();
-
-        DataRow<Serializable> row1 = DefaultDataRow.create(asList("id","name"), asList(4, "John Doe"));
-        DataRow<Serializable> row2 = DefaultDataRow.create(asList("id","name"), asList(3, "Mark Luis"));
-        TypedPublisher<DataRow> typedPublisher = TypedPublisher.from(Flux.just(row1, row2), DataRow.class);
-
-        Message inMessage = MessageBuilder.get(TestComponent.class)
-                .withTypedPublisher(typedPublisher)
-                .build();
-
-        // When
-        Message outMessage = component.apply(context, inMessage);
-
-        // Then
-        String json = outMessage.payload();
-        String expected = "[\n" +
-                "    {\n" +
-                "        \"name\": \"John Doe\",\n" +
-                "        \"id\": 4\n" +
-                "    },\n" +
-                "    {\n" +
-                "        \"name\": \"Mark Luis\",\n" +
-                "        \"id\": 3\n" +
-                "    }\n" +
-                "]";
-        assertEquals(expected, json, STRICT);
-    }
-
-    @Test
-    void shouldConvertDataRow() {
-        // Given
-        component.initialize();
-
-        DataRow<Serializable> row = DefaultDataRow.create(asList("id","name"), asList(4, "John Doe"));
-
-        Message inMessage = MessageBuilder.get(TestComponent.class)
-                .withJavaObject(row)
-                .build();
-
-        // When
-        Message actual = component.apply(context, inMessage);
-
-        // Then
-        String actualJson = actual.payload();
-        String expectedJson = "{\n" +
-                "    \"name\": \"John Doe\",\n" +
-                "    \"id\": 4\n" +
-                "}";
-        assertEquals(expectedJson, actualJson, STRICT);
     }
 
     @Test

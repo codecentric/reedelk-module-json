@@ -2,7 +2,6 @@ package com.reedelk.json.internal;
 
 import com.reedelk.runtime.api.commons.PlatformTypes;
 import com.reedelk.runtime.api.converter.ConverterService;
-import com.reedelk.runtime.api.message.content.DataRow;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -23,8 +22,6 @@ public class ObjectToJSONConverter {
             return toJSON((List<?>) payload); // To JSON Array
         } else if (payload instanceof Map) {
             return toJSON((Map<?, ?>) payload); // To JSON Object
-        } else if (payload instanceof DataRow) {
-            return toJSON((DataRow<?>) payload); // To JSON Object
         } else if (payload != null) {
             return PlatformTypes.isPrimitive(payload.getClass()) ? // To Primitive or JSON Object
                     payload : new JSONObject(payload);
@@ -49,15 +46,5 @@ public class ObjectToJSONConverter {
             array.put(i, toJSON(list.get(i)));
         }
         return array;
-    }
-
-    private JSONObject toJSON(DataRow<?> dataRow) {
-        JSONObject rowObject = new JSONObject();
-        int numColumns = dataRow.columnCount();
-        for (int i = 0; i < numColumns; i++) {
-            String columnName = dataRow.columnName(i);
-            rowObject.put(columnName, dataRow.get(i));
-        }
-        return rowObject;
     }
 }
