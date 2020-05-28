@@ -9,6 +9,7 @@ import com.reedelk.runtime.api.component.ProcessorSync;
 import com.reedelk.runtime.api.converter.ConverterService;
 import com.reedelk.runtime.api.flow.FlowContext;
 import com.reedelk.runtime.api.message.Message;
+import com.reedelk.runtime.api.message.MessageAttributes;
 import com.reedelk.runtime.api.message.MessageBuilder;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -22,6 +23,13 @@ import static com.reedelk.json.internal.commons.Messages.ObjectToJSON.NOT_JSON_S
 import static com.reedelk.json.internal.commons.Messages.ObjectToJSON.NOT_VALID_JSON_OBJECT;
 
 @ModuleComponent("Object to JSON")
+@ComponentOutput(
+        attributes = MessageAttributes.class,
+        payload = String.class,
+        description = "A JSON serialized string of the input Object.")
+@ComponentInput(
+        payload = Object.class,
+        description = "An object structure to be converted to JSON string.")
 @Description("Converts a Java Object into a JSON string. " +
         "A Java List is mapped to a JSON Array and a Java Map is mapped to a Java Map. " +
         "Any other Java object is mapped using getters. " +
