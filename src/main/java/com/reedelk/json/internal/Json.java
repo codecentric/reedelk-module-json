@@ -8,9 +8,6 @@ import org.json.JSONObject;
 
 import static com.reedelk.json.internal.commons.Messages.ObjectToJSON.NOT_VALID_JSON_OBJECT;
 
-// TODO: The problem is that autocomplete does not complete if there are two methods with the same name
-//  and with different arguments only?
-// TODO: Add tests to these functions.
 @Type(global = true,
         description = "The Json type provides a set of utility functions to convert from/to JSON.")
 public class Json {
