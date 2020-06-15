@@ -25,7 +25,7 @@ public class Json {
 
     @TypeFunction(
             cursorOffset = 1,
-            signature = "stringify(object: Object)",
+            signature = "stringify(Object object)",
             example = "Json.stringify(message.payload())",
             description = "Converts the input into a JSON string.")
     public String stringify(Object object) {
@@ -34,7 +34,7 @@ public class Json {
 
     @TypeFunction(
             cursorOffset = 1,
-            signature = "stringify(object: Object, indentFactor: int)",
+            signature = "stringify(Object object, int indentFactor)",
             example = "Json.stringify(message.payload(), 2)",
             description = "Converts the input into a pretty printed JSON string using the provided indent factor.")
     public String stringify(Object object, int indentFactor) {
@@ -43,7 +43,7 @@ public class Json {
 
     @TypeFunction(
             cursorOffset = 1,
-            signature = "parse(json: String)",
+            signature = "parse(String json)",
             example = "Json.parse(\"{'name': 'John', 'surname': 'Doe'}\")",
             description = "Parses the input string into a Java object. The output object is a list or a map according to the input JSON.")
     public Object parse(String json) {
