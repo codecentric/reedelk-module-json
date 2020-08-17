@@ -93,6 +93,20 @@ class JSONToObjectTest {
     }
 
     @Test
+    void shouldConvertJSONObjectAsBytesArray() {
+        // Given
+        byte[] input = "{'one':'one value','two': { 'three': 'three value' } }".getBytes();
+        Message message = MessageBuilder.get(TestComponent.class).withBinary(input).build();
+
+        // When
+        Message actual = component.apply(context, message);
+
+        // Then
+        Map<String,Object> payload = actual.payload();
+        assertThat(payload).isEqualTo(of("one", "one value", "two", ImmutableMap.of("three", "three value")));
+    }
+
+    @Test
     void shouldReturnNullPayloadWhenInputIsNull() {
         // Given
         Message message = MessageBuilder.get(TestComponent.class).empty().build();
