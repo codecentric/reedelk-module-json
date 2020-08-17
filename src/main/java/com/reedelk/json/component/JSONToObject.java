@@ -14,6 +14,8 @@ import com.reedelk.runtime.api.message.MessageBuilder;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ServiceScope;
 
+import java.nio.charset.StandardCharsets;
+
 @ModuleComponent("JSON to Object")
 @ComponentOutput(
         attributes = MessageAttributes.class,
@@ -36,6 +38,7 @@ public class JSONToObject implements ProcessorSync {
         converter = new JSONToObjectConverter();
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public Message apply(FlowContext flowContext, Message message) {
 
@@ -45,6 +48,13 @@ public class JSONToObject implements ProcessorSync {
             return MessageBuilder.get(JSONToObject.class)
                     .empty()
                     .build();
+        }
+
+        if (payload instanceof byte[] || payload instanceof Byte[]) {
+            // We convert the payload to string. This is to avoid
+            // having the user con convert byte array to string.
+            // We convert using UTF-8, because a JSON is UTF-8 encoded.
+            payload = new String((byte[]) payload, StandardCharsets.UTF_8);
         }
 
         Preconditions.checkIsStringOrThrow(payload);

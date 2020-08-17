@@ -1,5 +1,10 @@
 [
   {
+    "version": "1.0.1",
+    "date": "//TODO: Add date",
+    "release-notes": "<ul><li>Feature: Automatically convert byte array payload to UTF-8 String.</li><ul>"
+  },
+  {
     "version": "1.0.0",
     "date": "22/6/2020",
     "release-notes": "<ul><li>First module-json release.</li><ul>"
