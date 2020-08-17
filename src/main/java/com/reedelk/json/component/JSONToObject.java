@@ -54,7 +54,7 @@ public class JSONToObject implements ProcessorSync {
             // We convert the payload to string. This is to avoid
             // having the user con convert byte array to string.
             // We convert using UTF-8, because a JSON is UTF-8 encoded.
-            payload = new String((byte[]) payload, StandardCharsets.UTF_8);
+            payload = convertAsStringUTF8((byte[]) payload);
         }
 
         Preconditions.checkIsStringOrThrow(payload);
@@ -64,5 +64,13 @@ public class JSONToObject implements ProcessorSync {
         return MessageBuilder.get(JSONToObject.class)
                 .withJavaObject(asJavaObject)
                 .build();
+    }
+
+    // TODO: This method should be a generic method in the converter service.
+    //  the converter service should allow to convert to a string with a given charset.
+    //  when created also the PayloadToString component should use the same (with streams).
+    @Deprecated
+    private String convertAsStringUTF8(byte[] payload) {
+        return new String(payload, StandardCharsets.UTF_8);
     }
 }
