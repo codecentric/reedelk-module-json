@@ -1,6 +1,6 @@
-package com.reedelk.json.internal.exception;
+package de.codecentric.reedelk.json.internal.exception;
 
-import com.reedelk.runtime.api.exception.PlatformException;
+import de.codecentric.reedelk.runtime.api.exception.PlatformException;
 import org.json.JSONException;
 
 public class JSONToObjectException extends PlatformException {

@@ -1,9 +1,9 @@
-package com.reedelk.json.internal.script;
+package de.codecentric.reedelk.json.internal.script;
 
-import com.reedelk.json.internal.JSONToObjectConverter;
-import com.reedelk.json.internal.Json;
-import com.reedelk.json.internal.ObjectToJSONConverter;
-import com.reedelk.runtime.api.script.ScriptGlobalFunctions;
+import de.codecentric.reedelk.json.internal.JSONToObjectConverter;
+import de.codecentric.reedelk.json.internal.Json;
+import de.codecentric.reedelk.json.internal.ObjectToJSONConverter;
+import de.codecentric.reedelk.runtime.api.script.ScriptGlobalFunctions;
 
 import java.util.HashMap;
 import java.util.Map;

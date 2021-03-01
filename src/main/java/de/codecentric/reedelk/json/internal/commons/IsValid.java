@@ -1,4 +1,4 @@
-package com.reedelk.json.internal.commons;
+package de.codecentric.reedelk.json.internal.commons;
 
 import org.json.JSONArray;
 import org.json.JSONException;

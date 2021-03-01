@@ -1,16 +1,16 @@
-package com.reedelk.json.component;
+package de.codecentric.reedelk.json.component;
 
-import com.reedelk.json.internal.JSONToObjectConverter;
-import com.reedelk.json.internal.commons.Preconditions;
-import com.reedelk.runtime.api.annotation.ComponentInput;
-import com.reedelk.runtime.api.annotation.ComponentOutput;
-import com.reedelk.runtime.api.annotation.Description;
-import com.reedelk.runtime.api.annotation.ModuleComponent;
-import com.reedelk.runtime.api.component.ProcessorSync;
-import com.reedelk.runtime.api.flow.FlowContext;
-import com.reedelk.runtime.api.message.Message;
-import com.reedelk.runtime.api.message.MessageAttributes;
-import com.reedelk.runtime.api.message.MessageBuilder;
+import de.codecentric.reedelk.json.internal.JSONToObjectConverter;
+import de.codecentric.reedelk.json.internal.commons.Preconditions;
+import de.codecentric.reedelk.runtime.api.annotation.ComponentInput;
+import de.codecentric.reedelk.runtime.api.annotation.ComponentOutput;
+import de.codecentric.reedelk.runtime.api.annotation.Description;
+import de.codecentric.reedelk.runtime.api.annotation.ModuleComponent;
+import de.codecentric.reedelk.runtime.api.component.ProcessorSync;
+import de.codecentric.reedelk.runtime.api.flow.FlowContext;
+import de.codecentric.reedelk.runtime.api.message.Message;
+import de.codecentric.reedelk.runtime.api.message.MessageAttributes;
+import de.codecentric.reedelk.runtime.api.message.MessageBuilder;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ServiceScope;
 

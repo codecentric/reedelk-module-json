@@ -1,16 +1,17 @@
-package com.reedelk.json.component;
+package de.codecentric.reedelk.json.component;
 
-import com.reedelk.json.internal.ObjectToJSONConverter;
-import com.reedelk.json.internal.commons.Defaults;
-import com.reedelk.json.internal.commons.IsValid;
-import com.reedelk.json.internal.exception.ObjectToJSONException;
-import com.reedelk.runtime.api.annotation.*;
-import com.reedelk.runtime.api.component.ProcessorSync;
-import com.reedelk.runtime.api.converter.ConverterService;
-import com.reedelk.runtime.api.flow.FlowContext;
-import com.reedelk.runtime.api.message.Message;
-import com.reedelk.runtime.api.message.MessageAttributes;
-import com.reedelk.runtime.api.message.MessageBuilder;
+import de.codecentric.reedelk.json.internal.ObjectToJSONConverter;
+import de.codecentric.reedelk.json.internal.commons.Defaults;
+import de.codecentric.reedelk.json.internal.commons.IsValid;
+import de.codecentric.reedelk.json.internal.exception.ObjectToJSONException;
+import de.codecentric.reedelk.runtime.api.annotation.*;
+import de.codecentric.reedelk.runtime.api.component.ProcessorSync;
+import de.codecentric.reedelk.runtime.api.converter.ConverterService;
+import de.codecentric.reedelk.runtime.api.flow.FlowContext;
+import de.codecentric.reedelk.runtime.api.message.Message;
+import de.codecentric.reedelk.runtime.api.message.MessageAttributes;
+import de.codecentric.reedelk.runtime.api.message.MessageBuilder;
+import de.codecentric.reedelk.json.internal.commons.Messages;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.osgi.service.component.annotations.Component;
@@ -18,9 +19,6 @@ import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ServiceScope;
 
 import java.util.Optional;
-
-import static com.reedelk.json.internal.commons.Messages.ObjectToJSON.NOT_JSON_STRING;
-import static com.reedelk.json.internal.commons.Messages.ObjectToJSON.NOT_VALID_JSON_OBJECT;
 
 @ModuleComponent("Object to JSON")
 @ComponentOutput(
@@ -86,7 +84,7 @@ public class ObjectToJSON implements ProcessorSync {
                         .withJson(input)
                         .build();
             } else {
-                throw new ObjectToJSONException(NOT_JSON_STRING.format());
+                throw new ObjectToJSONException(Messages.ObjectToJSON.NOT_JSON_STRING.format());
             }
 
         } else {
@@ -120,7 +118,7 @@ public class ObjectToJSON implements ProcessorSync {
 
         } else {
             // A JSON is valid if and only if the Root is an array or an object.
-            throw new ObjectToJSONException(NOT_VALID_JSON_OBJECT.format(result == null ? null : result.getClass()));
+            throw new ObjectToJSONException(Messages.ObjectToJSON.NOT_VALID_JSON_OBJECT.format(result == null ? null : result.getClass()));
         }
     }
 }

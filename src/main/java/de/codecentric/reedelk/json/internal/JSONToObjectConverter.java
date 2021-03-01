@@ -1,13 +1,11 @@
-package com.reedelk.json.internal;
+package de.codecentric.reedelk.json.internal;
 
-import com.reedelk.json.internal.exception.JSONToObjectException;
+import de.codecentric.reedelk.json.internal.exception.JSONToObjectException;
+import de.codecentric.reedelk.json.internal.commons.Messages;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
-
-import static com.reedelk.json.internal.commons.Messages.JSONToObject.JSON_PARSE_ERROR;
-import static com.reedelk.json.internal.commons.Messages.JSONToObject.JSON_TOKEN_ERROR;
 
 public class JSONToObjectConverter {
 
@@ -16,7 +14,7 @@ public class JSONToObjectConverter {
         try {
             token = new JSONTokener(payload).nextValue();
         } catch (JSONException exception) {
-            String error = JSON_PARSE_ERROR.format(exception.getMessage());
+            String error = Messages.JSONToObject.JSON_PARSE_ERROR.format(exception.getMessage());
             throw new JSONToObjectException(error, exception);
         }
 
@@ -29,7 +27,7 @@ public class JSONToObjectConverter {
             return array.toList();
 
         } else {
-            String error = JSON_TOKEN_ERROR.format(token);
+            String error = Messages.JSONToObject.JSON_TOKEN_ERROR.format(token);
             throw new JSONToObjectException(error);
         }
     }

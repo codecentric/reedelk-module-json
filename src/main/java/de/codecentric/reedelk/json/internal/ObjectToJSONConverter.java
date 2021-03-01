@@ -1,7 +1,7 @@
-package com.reedelk.json.internal;
+package de.codecentric.reedelk.json.internal;
 
-import com.reedelk.runtime.api.commons.PlatformTypes;
-import com.reedelk.runtime.api.converter.ConverterService;
+import de.codecentric.reedelk.runtime.api.commons.PlatformTypes;
+import de.codecentric.reedelk.runtime.api.converter.ConverterService;
 import org.json.JSONArray;
 import org.json.JSONObject;
 

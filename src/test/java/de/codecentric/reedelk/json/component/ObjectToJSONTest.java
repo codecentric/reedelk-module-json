@@ -1,10 +1,10 @@
-package com.reedelk.json.component;
+package de.codecentric.reedelk.json.component;
 
-import com.reedelk.runtime.api.converter.ConverterService;
-import com.reedelk.runtime.api.flow.FlowContext;
-import com.reedelk.runtime.api.message.Message;
-import com.reedelk.runtime.api.message.MessageBuilder;
-import com.reedelk.runtime.api.message.content.Pair;
+import de.codecentric.reedelk.runtime.api.converter.ConverterService;
+import de.codecentric.reedelk.runtime.api.flow.FlowContext;
+import de.codecentric.reedelk.runtime.api.message.Message;
+import de.codecentric.reedelk.runtime.api.message.MessageBuilder;
+import de.codecentric.reedelk.runtime.api.message.content.Pair;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,7 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 import java.util.Map;
 
-import static com.reedelk.runtime.api.commons.ImmutableMap.of;
+import static de.codecentric.reedelk.runtime.api.commons.ImmutableMap.of;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;

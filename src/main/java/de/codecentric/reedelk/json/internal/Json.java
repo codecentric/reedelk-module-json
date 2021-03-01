@@ -1,12 +1,11 @@
-package com.reedelk.json.internal;
+package de.codecentric.reedelk.json.internal;
 
-import com.reedelk.json.internal.exception.ObjectToJSONException;
-import com.reedelk.runtime.api.annotation.Type;
-import com.reedelk.runtime.api.annotation.TypeFunction;
+import de.codecentric.reedelk.json.internal.exception.ObjectToJSONException;
+import de.codecentric.reedelk.runtime.api.annotation.Type;
+import de.codecentric.reedelk.runtime.api.annotation.TypeFunction;
+import de.codecentric.reedelk.json.internal.commons.Messages;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import static com.reedelk.json.internal.commons.Messages.ObjectToJSON.NOT_VALID_JSON_OBJECT;
 
 @Type(global = true,
         description = "The Json type provides a set of utility functions to convert from/to JSON.")
@@ -61,7 +60,7 @@ public class Json {
 
         } else {
             // A JSON is valid if and only if the Root is an array or an object.
-            throw new ObjectToJSONException(NOT_VALID_JSON_OBJECT.format(result == null ? null : result.getClass()));
+            throw new ObjectToJSONException(Messages.ObjectToJSON.NOT_VALID_JSON_OBJECT.format(result == null ? null : result.getClass()));
         }
     }
 }

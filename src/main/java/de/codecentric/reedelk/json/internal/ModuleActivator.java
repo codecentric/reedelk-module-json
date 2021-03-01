@@ -1,8 +1,8 @@
-package com.reedelk.json.internal;
+package de.codecentric.reedelk.json.internal;
 
-import com.reedelk.json.internal.script.GlobalFunctions;
-import com.reedelk.runtime.api.converter.ConverterService;
-import com.reedelk.runtime.api.script.ScriptEngineService;
+import de.codecentric.reedelk.json.internal.script.GlobalFunctions;
+import de.codecentric.reedelk.runtime.api.converter.ConverterService;
+import de.codecentric.reedelk.runtime.api.script.ScriptEngineService;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;

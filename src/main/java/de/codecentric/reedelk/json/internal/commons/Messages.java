@@ -1,6 +1,6 @@
-package com.reedelk.json.internal.commons;
+package de.codecentric.reedelk.json.internal.commons;
 
-import com.reedelk.runtime.api.commons.FormattedMessage;
+import de.codecentric.reedelk.runtime.api.commons.FormattedMessage;
 
 public class Messages {
 

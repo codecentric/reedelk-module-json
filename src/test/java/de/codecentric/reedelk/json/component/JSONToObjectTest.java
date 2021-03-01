@@ -1,11 +1,11 @@
-package com.reedelk.json.component;
+package de.codecentric.reedelk.json.component;
 
-import com.reedelk.json.internal.exception.JSONToObjectException;
-import com.reedelk.runtime.api.commons.ImmutableMap;
-import com.reedelk.runtime.api.flow.FlowContext;
-import com.reedelk.runtime.api.message.Message;
-import com.reedelk.runtime.api.message.MessageBuilder;
-import com.reedelk.runtime.api.message.content.Pair;
+import de.codecentric.reedelk.json.internal.exception.JSONToObjectException;
+import de.codecentric.reedelk.runtime.api.commons.ImmutableMap;
+import de.codecentric.reedelk.runtime.api.flow.FlowContext;
+import de.codecentric.reedelk.runtime.api.message.Message;
+import de.codecentric.reedelk.runtime.api.message.MessageBuilder;
+import de.codecentric.reedelk.runtime.api.message.content.Pair;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,7 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import static com.reedelk.runtime.api.commons.ImmutableMap.of;
+import static de.codecentric.reedelk.runtime.api.commons.ImmutableMap.of;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
